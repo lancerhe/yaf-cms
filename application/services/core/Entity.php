@@ -16,7 +16,6 @@ class Entity {
 
     protected $_changed = [];
 
-
     /**
      * 初始化，将数据转化为对象内的一个元素数组信息，类外通过魔术方法调用
      */
@@ -68,5 +67,13 @@ class Entity {
 
     public function hasChanged() {
         return empty( $this->_changed ) ? false : true;
+    }
+
+    /**
+     * 是否已删除
+     * @return boolean
+     */
+    public function isTrash() {
+        return ($this->_properties['deleted']) ? true : false;
     }
 }

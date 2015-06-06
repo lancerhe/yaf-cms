@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Lancer He <lancer.he@gmail.com>
- * @since  2014-11-22
+ * @since  2015-06-06
  */
 
 namespace Service\Setting;

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php include $view_path . '/common/head.html'?>
+<body>
+<?php include $view_path . '/common/headbar.html'?>
+<div class="main-container" id="main-container">
+    <div class="main-container-inner">
+        <?php include $view_path . '/common/navbar.html'?>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+                </script>
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="/admin/index/index">控制板</a>
+                    </li>
+                    <li class="active">单页管理</li>
+                </ul>
+            </div>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        单页管理
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            单页列表
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="center" width="5%">ID</th>
+                                                <th width="15%">标题</th>
+                                                <th width="40%">前台访问地址</th>
+                                                <th width="10%">创建时间</th>
+                                                <th width="25%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($rows as $row) :?>
+                                            <tr data-id="<?php echo $row['id']?>">
+                                                <td class="center"><?php echo $row['id']?></td>
+                                                <td data-label="title"><?php echo $row['title']?></td>
+                                                <td data-label="url"><a target="_blank" href="<?php echo $row['url']?>"><?php echo $row['url']?></a></td>
+                                                <td data-label="createtime"><?php echo $row['createtime']?></td>
+                                                <td>
+                                                    <button data-btn="view" class="btn btn-xs btn-success">
+                                                        <i class="icon-eye-open bigger-100"></i>
+                                                        查看
+                                                    </button>
+                                                    <button data-btn="edit" class="btn btn-xs btn-primary">
+                                                        <i class="icon-edit bigger-100"></i>
+                                                        编辑
+                                                    </button>
+                                                    <button data-btn="trash" class="btn btn-xs btn-danger">
+                                                        <i class="icon-trash bigger-100"></i>
+                                                        删除
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div><!-- /span -->
+                            <div class="dataTables_paginate paging_bootstrap">
+                                <?php echo $pagination?>
+                            </div>
+                        </div><!-- /row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include $view_path . '/common/foot.html'?>
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $('[data-btn=close]').on(ace.click_event, function() {
+        var id             = $(this).parents('tr').attr('data-id');
+        var community_name = $(this).parents('tr').find('[data-label=community_name]').text();
+        var publishdate    = $(this).parents('tr').find('[data-label=publishdate]').text();
+        var publisher      = $(this).parents('tr').find('[data-label=publisher]').text();
+        var content        = $(this).parents('tr').find('[data-label=content]').text();
+
+        bootbox.dialog({
+            title: '完结',
+            message: '<form class="form-horizontal" role="form"><div class="row"><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 报修内容 </label><div class="col-sm-7"><textarea readonly class="autosize-transition form-control" rows="3">'+content+'</textarea></div></div><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 完结备注 </label><div class="col-sm-7"><textarea class="autosize-transition form-control" id="pop-complete" rows="2"></textarea></div></div></div></form>',
+            onEscape: function() {
+                return true;
+            },
+            buttons: {
+                complete: {
+                    label: "完结",
+                    className: "btn-success",
+                    callback: function () {
+                        var loading = bootbox.loading();
+                        $.ajax ({
+                            type:'POST',
+                            data: {id: id, complete: $("#pop-complete").val()},
+                            dataType:'json',
+                            url: '/ajax/call/close',
+                            success: function(response) {
+                                bootbox.alert(response.message, function() {
+                                    if ( ! response.code ) window.location.reload();
+                                });
+                            },
+                            error: function() {
+                                bootbox.alert('服务器问题，请重试');
+                            },
+                            complete:function() {
+                                loading.modal('hide');
+                            }
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+
+    $('[data-btn=reply]').on(ace.click_event, function() {
+        var id             = $(this).parents('tr').attr('data-id');
+        var community_name = $(this).parents('tr').find('[data-label=community_name]').text();
+        var publishdate    = $(this).parents('tr').find('[data-label=publishdate]').text();
+        var publisher      = $(this).parents('tr').find('[data-label=publisher]').text();
+        var content        = $(this).parents('tr').find('[data-label=content]').text();
+
+        bootbox.dialog({
+            title: '回复' + publisher,
+            message: '<form class="form-horizontal" role="form"><div class="row"><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 内容 </label><div class="col-sm-7"><textarea readonly class="autosize-transition form-control" rows="3">'+content+'</textarea></div></div><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 回复 </label><div class="col-sm-7"><textarea class="autosize-transition form-control" id="pop-reply" rows="2"></textarea></div></div></div></form>',
+            onEscape: function() {
+                return true;
+            },
+            buttons: {
+                reply: {
+                    label: "回复",
+                    className: "btn-success",
+                    callback: function () {
+                        var loading = bootbox.loading();
+                        $.ajax ({
+                            type:'POST',
+                            data: {id: id, reply: $("#pop-reply").val()},
+                            dataType:'json',
+                            url: '/ajax/call/reply',
+                            success: function(response) {
+                                bootbox.alert(response.message, function() {
+                                    if ( ! response.code ) window.location.reload();
+                                });
+                            },
+                            error: function() {
+                                bootbox.alert('服务器问题，请重试');
+                            },
+                            complete:function() {
+                                loading.modal('hide');
+                            }
+                        });
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+
+    $('[data-btn=view]').on(ace.click_event, function() {
+        var id      = $(this).parents('tr').attr('data-id');
+        var title   = $(this).parents('tr').find('[data-label=name]').text();
+        var loading = bootbox.loading();
+        $.ajax ({
+            type:'POST',
+            data: {id: id},
+            dataType:'json',
+            url: '/ajax/call/view',
+            success: function(response) {
+                if ( response.code ) bootbox.alert( response.message );
+                bootbox.dialog({
+                    title: title,
+                    message: response.data,
+                    onEscape: function() {
+                        return true;
+                    }
+                });
+            },
+            error: function() {
+                bootbox.alert('服务器问题，请重试');
+            },
+            complete:function() {
+                loading.modal('hide');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

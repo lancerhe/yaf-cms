@@ -38,4 +38,29 @@ class Admin extends \Core\Controller {
     public function initAssign() {
         $this->getView()->assign("manager", \Service\Manager\Dispatcher::getInstance()->getManager()->getProperties());
     }
+
+    /**
+     * 获取当前Page
+     * @return int
+     */
+    public function getCurrentPage() {
+        $page  = intval($this->getRequest()->getQuery('page'));
+        return (1 > $page) ? 1 : $page;
+    }
+
+    /**
+     * 获取分页pagesize
+     * @return int
+     */
+    public function getPageLimit() {
+        return 10;
+    }
+
+    /**
+     * 获取分页开始Start值
+     * @return int
+     */
+    public function getPageStart() {
+        return ($this->getCurrentPage() - 1) * $this->getPageLimit();
+    }
 }

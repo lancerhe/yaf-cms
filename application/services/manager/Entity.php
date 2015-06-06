@@ -27,14 +27,6 @@ class Entity extends Core_Entity {
     ];
 
     /**
-     * 是否已删除
-     * @return boolean
-     */
-    public function isTrash() {
-        return ($this->_properties['deleted']) ? true : false;
-    }
-
-    /**
      * 验证管理员密码是否一致
      * @param  string  $password  非加密密码
      * @return void|exception 

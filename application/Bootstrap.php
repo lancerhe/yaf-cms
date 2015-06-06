@@ -19,6 +19,7 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
         define('APPLICATION_SERVICES_PATH', APPLICATION_PATH . '/services');
         define('APPLICATION_LIBRARY_PATH',  APPLICATION_PATH . '/library');
         define('APPLICATION_MODULES_PATH',  APPLICATION_PATH . '/modules');
+        define('PUBLIC_URL' ,               "http://".$dispatcher->getRequest()->getServer("HTTP_HOST"));
     }
 
 
