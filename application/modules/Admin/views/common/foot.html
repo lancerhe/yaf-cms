@@ -24,6 +24,36 @@
                 message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
             });
         }
+
+        bootbox.bindConfirmEvent = function(btn, label, request_uri, confirm_message) {
+            $('[data-btn='+btn+']').on(ace.click_event, function() {
+                var id      = $(this).parents('tr').attr('data-id');
+                var message = confirm_message( $(this) );
+
+                bootbox.confirm(message, function(res){
+                    if ( ! res) return;
+
+                    var loading = bootbox.loading();
+                    $.ajax ({
+                        type:'POST',
+                        data: {id: id},
+                        dataType:'json',
+                        url: request_uri,
+                        success: function(response) {
+                            bootbox.alert(response.message, function() {
+                                if ( ! response.code ) window.location.reload();
+                            });
+                        },
+                        error: function() {
+                            bootbox.alert('服务器问题，请重试');
+                        },
+                        complete:function() {
+                            loading.modal('hide');
+                        }
+                    });
+                });
+            });
+        }
         document.buildFormJson = function(form) {
             var o = {};
             var a = form.serializeArray();

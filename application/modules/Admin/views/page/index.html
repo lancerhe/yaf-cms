@@ -206,6 +206,11 @@ jQuery(function($) {
             }
         });
     });
+
+    bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
+        var title = $btn.parents('tr').find('[data-label=title]').text();
+        return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
+    });
 });
 </script>
 </body>

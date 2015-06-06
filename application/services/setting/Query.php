@@ -15,6 +15,6 @@ class Query extends Core_Query {
         $model = new \Model_Setting();
         $row   = $model->fetchList();
         $this->_assoc  = $row;
-        $this->_entity = new Entity($row);
+        $this->_Entity = new Entity($row);
     }
 }
