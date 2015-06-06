@@ -6,7 +6,9 @@
 
 namespace Service\Setting;
 
-class Entity extends \Core\Entity {
+use Service\Core\Entity as Core_Entity;
+
+class Entity extends Core_Entity {
 
     protected $_properties = [
         'site_name'      => '',

@@ -10,8 +10,9 @@ namespace Service\Manager;
 use Service\Manager\Entity;
 use Service\Manager\Exception\NotFoundException;
 use Service\Manager\Exception\HasTrashException;
+use Service\Core\Query as Core_Query;
 
-class Query {
+class Query extends Core_Query {
 
     /**
      * 初始化查询类
@@ -60,21 +61,5 @@ class Query {
         if ( $this->_entity->isTrash() ) {
             throw new HasTrashException();
         }
-    }
-
-    /**
-     * 获取变量
-     * @return array
-     */
-    public function getAssoc() {
-        return $this->_assoc;
-    }
-
-    /**
-     * 获取对象
-     * @return Entity
-     */
-    public function getEntity() {
-        return $this->_entity;
     }
 }

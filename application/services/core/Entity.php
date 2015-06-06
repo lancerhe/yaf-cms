@@ -1,10 +1,10 @@
 <?php
 /**
  * @author Lancer He <lancer.he@gmail.com>
- * @since  2014-05-21
+ * @since  2015-06-06
  */
 
-namespace Core;
+namespace Service\Core;
 
 class Entity {
 

@@ -10,8 +10,9 @@ namespace Service\Manager;
 use Service\Manager\RoleList;
 use Service\Manager\Session;
 use Service\Manager\Exception\PasswordNotMatchException;
+use Service\Core\Entity as Core_Entity;
 
-class Entity extends \Core\Entity {
+class Entity extends Core_Entity {
 
     protected $_properties = [
         'mid'            => 0,
