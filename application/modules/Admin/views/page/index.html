@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include $view_path . '/common/head.html'?>
+<style type="text/css">
+.modal-dialog {width: 860px;}
+</style>
+<link href="/assets/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
 <body>
 <?php include $view_path . '/common/headbar.html'?>
 <div class="main-container" id="main-container">
@@ -58,10 +63,6 @@
                                                 <td data-label="url"><a target="_blank" href="<?php echo $row['url']?>"><?php echo $row['url']?></a></td>
                                                 <td data-label="createtime"><?php echo $row['createtime']?></td>
                                                 <td>
-                                                    <button data-btn="view" class="btn btn-xs btn-success">
-                                                        <i class="icon-eye-open bigger-100"></i>
-                                                        查看
-                                                    </button>
                                                     <button data-btn="edit" class="btn btn-xs btn-primary">
                                                         <i class="icon-edit bigger-100"></i>
                                                         编辑
@@ -89,123 +90,13 @@
 </div>
 <?php include $view_path . '/common/foot.html'?>
 
+<script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.min.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
-
-    $('[data-btn=close]').on(ace.click_event, function() {
-        var id             = $(this).parents('tr').attr('data-id');
-        var community_name = $(this).parents('tr').find('[data-label=community_name]').text();
-        var publishdate    = $(this).parents('tr').find('[data-label=publishdate]').text();
-        var publisher      = $(this).parents('tr').find('[data-label=publisher]').text();
-        var content        = $(this).parents('tr').find('[data-label=content]').text();
-
-        bootbox.dialog({
-            title: '完结',
-            message: '<form class="form-horizontal" role="form"><div class="row"><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 报修内容 </label><div class="col-sm-7"><textarea readonly class="autosize-transition form-control" rows="3">'+content+'</textarea></div></div><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 完结备注 </label><div class="col-sm-7"><textarea class="autosize-transition form-control" id="pop-complete" rows="2"></textarea></div></div></div></form>',
-            onEscape: function() {
-                return true;
-            },
-            buttons: {
-                complete: {
-                    label: "完结",
-                    className: "btn-success",
-                    callback: function () {
-                        var loading = bootbox.loading();
-                        $.ajax ({
-                            type:'POST',
-                            data: {id: id, complete: $("#pop-complete").val()},
-                            dataType:'json',
-                            url: '/ajax/call/close',
-                            success: function(response) {
-                                bootbox.alert(response.message, function() {
-                                    if ( ! response.code ) window.location.reload();
-                                });
-                            },
-                            error: function() {
-                                bootbox.alert('服务器问题，请重试');
-                            },
-                            complete:function() {
-                                loading.modal('hide');
-                            }
-                        });
-                        return false;
-                    }
-                }
-            }
-        });
-    });
-
-
-    $('[data-btn=reply]').on(ace.click_event, function() {
-        var id             = $(this).parents('tr').attr('data-id');
-        var community_name = $(this).parents('tr').find('[data-label=community_name]').text();
-        var publishdate    = $(this).parents('tr').find('[data-label=publishdate]').text();
-        var publisher      = $(this).parents('tr').find('[data-label=publisher]').text();
-        var content        = $(this).parents('tr').find('[data-label=content]').text();
-
-        bootbox.dialog({
-            title: '回复' + publisher,
-            message: '<form class="form-horizontal" role="form"><div class="row"><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 内容 </label><div class="col-sm-7"><textarea readonly class="autosize-transition form-control" rows="3">'+content+'</textarea></div></div><div class="form-group"><label class="col-sm-3 control-label no-padding-right"> 回复 </label><div class="col-sm-7"><textarea class="autosize-transition form-control" id="pop-reply" rows="2"></textarea></div></div></div></form>',
-            onEscape: function() {
-                return true;
-            },
-            buttons: {
-                reply: {
-                    label: "回复",
-                    className: "btn-success",
-                    callback: function () {
-                        var loading = bootbox.loading();
-                        $.ajax ({
-                            type:'POST',
-                            data: {id: id, reply: $("#pop-reply").val()},
-                            dataType:'json',
-                            url: '/ajax/call/reply',
-                            success: function(response) {
-                                bootbox.alert(response.message, function() {
-                                    if ( ! response.code ) window.location.reload();
-                                });
-                            },
-                            error: function() {
-                                bootbox.alert('服务器问题，请重试');
-                            },
-                            complete:function() {
-                                loading.modal('hide');
-                            }
-                        });
-                        return false;
-                    }
-                }
-            }
-        });
-    });
-
-    $('[data-btn=view]').on(ace.click_event, function() {
-        var id      = $(this).parents('tr').attr('data-id');
-        var title   = $(this).parents('tr').find('[data-label=name]').text();
-        var loading = bootbox.loading();
-        $.ajax ({
-            type:'POST',
-            data: {id: id},
-            dataType:'json',
-            url: '/ajax/call/view',
-            success: function(response) {
-                if ( response.code ) bootbox.alert( response.message );
-                bootbox.dialog({
-                    title: title,
-                    message: response.data,
-                    onEscape: function() {
-                        return true;
-                    }
-                });
-            },
-            error: function() {
-                bootbox.alert('服务器问题，请重试');
-            },
-            complete:function() {
-                loading.modal('hide');
-            }
-        });
-    });
+    bootbox.bindDobuleFrameEvent('edit', '/ajax/page/edit', '/ajax/page/save', function($btn) {
+        return "编辑单页「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+    })
 
     bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
         var title = $btn.parents('tr').find('[data-label=title]').text();

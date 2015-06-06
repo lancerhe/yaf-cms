@@ -20,4 +20,15 @@ class Controller_Page extends \Core\Controller\Ajax {
         $this->getView()->display('删除成功');
     }
 
+    /**
+     * 编辑渲染模板
+     */
+    public function EditAction() {
+        $id = intval( $this->getRequest()->getPost('id') );
+        $Query = new \Service\Page\Query($id);
+        $Query->filterTrash();
+        
+        $this->getView()->assign('row', $Query->getAssoc());
+        $this->getView()->display('渲染成功', $this->getView()->render('page/edit.html') );
+    }
 }

@@ -14,6 +14,18 @@
         <script src="/assets/js/ace.min.js"></script>
         <script src="/assets/js/date-time/bootstrap-datepicker.min.js"></script>
         <script type="text/javascript">
+        var umeditor_default = {
+            imageUrl:"/ajax/ueditor/upload"             //图片上传提交地址
+            ,imagePath:"/upload"                       //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
+            ,imageFieldName:"upfile"                   //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+            ,toolbar:[
+                'source | undo redo | bold italic underline strikethrough | forecolor backcolor | removeformat |',
+                'insertorderedlist insertunorderedlist | paragraph fontfamily fontsize' ,
+                '| justifyleft justifycenter justifyright justifyjustify |',
+                'link unlink | image video',
+                '| horizontal print preview fullscreen', 'drafts', 'formula'
+            ]
+        };
         bootbox.setDefaults({
             locale: "zh_CN",
             animate: false
@@ -25,10 +37,10 @@
             });
         }
 
-        bootbox.bindConfirmEvent = function(btn, label, request_uri, confirm_message) {
+        bootbox.bindConfirmEvent = function(btn, label, request_uri, confirm_message_callback) {
             $('[data-btn='+btn+']').on(ace.click_event, function() {
                 var id      = $(this).parents('tr').attr('data-id');
-                var message = confirm_message( $(this) );
+                var message = confirm_message_callback( $(this) );
 
                 bootbox.confirm(message, function(res){
                     if ( ! res) return;
@@ -54,6 +66,66 @@
                 });
             });
         }
+
+        bootbox.bindDobuleFrameEvent = function(btn, request_uri, handler_uri, title_callback) {
+            $('[data-btn=edit]').on(ace.click_event, function() {
+                var id      = $(this).parents('tr').attr('data-id');
+                var title   = title_callback( $(this) );
+                var loading = bootbox.loading();
+                $.ajax ({
+                    type:'POST',
+                    data: {id: id},
+                    dataType:'json',
+                    url: request_uri,
+                    success: function(response) {
+                        if ( response.code ) bootbox.alert( response.message );
+                        var form_dialog = bootbox.dialog({
+                            title: title,
+                            message: response.data,
+                            onEscape: function() {
+                                return true;
+                            },
+                            buttons: {
+                                success: {
+                                    label: "保存",
+                                    className: "btn-success",
+                                    callback: function () {
+                                        data = document.buildFormJson( form_dialog.find('form') )
+                                        
+                                        var loading = bootbox.loading();
+                                        $.ajax ({
+                                            type:'POST',
+                                            data: data,
+                                            dataType:'json',
+                                            url: handler_uri,
+                                            success: function(response) {
+                                                bootbox.alert(response.message, function() {
+                                                    if ( ! response.code ) window.location.reload();
+                                                });
+                                            },
+                                            error: function() {
+                                                bootbox.alert('服务器问题，请重试');
+                                            },
+                                            complete:function() {
+                                                loading.modal('hide');
+                                            }
+                                        });
+                                        return false;
+                                    }
+                                }
+                            }
+                        });
+                    },
+                    error: function() {
+                        bootbox.alert('服务器问题，请重试');
+                    },
+                    complete:function() {
+                        loading.modal('hide');
+                    }
+                });
+            });
+        }
+
         document.buildFormJson = function(form) {
             var o = {};
             var a = form.serializeArray();
