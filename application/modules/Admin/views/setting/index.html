@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php include $view_path . '/common/head.html'?>
+<body>
+<?php include $view_path . '/common/headbar.html'?>
+<div class="main-container" id="main-container">
+    <div class="main-container-inner">
+        <?php include $view_path . '/common/navbar.html'?>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+                </script>
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="/">控制板</a>
+                    </li>
+                    <li class="active">平台配置</li>
+                </ul>
+            </div>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        平台配置
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            配置列表
+                        </small><!-- 
+                        <small>
+                            <a href="/setting/badword">关键词管理</a>
+                        </small> -->
+                    </h1>
+                </div><!-- /.page-header -->
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+
+                        <form class="form-horizontal" id="form">
+                            <div class="row">
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_name"> 网站标题 </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_name" name="site_name" value="<?php echo $setting['site_name']?>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_keywords"> 网站默认关键字 </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_keywords" name="site_keywords" value="<?php echo $setting['site_keywords']?>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_descrip"> 网站描述 </label>
+
+                                    <div class="col-sm-9">
+                                        <textarea class="input-xxlarge" id="site_descrip" name="site_descrip" rows="3" placeholder="网站描述"><?php echo $setting['site_descrip']?></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_copyright"> 网站版权信息 </label>
+
+                                    <div class="col-sm-9">
+                                        <textarea class="input-xxlarge" id="site_copyright" name="site_copyright" rows="3" placeholder="网站版权信息"><?php echo $setting['site_copyright']?></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_icp"> 网站备案号 </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_icp" name="site_icp" value="<?php echo $setting['site_icp']?>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_phone"> 联系电话 </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_phone" name="site_phone" value="<?php echo $setting['site_phone']?>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_address"> 联系地址 </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_address" name="site_address" value="<?php echo $setting['site_address']?>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-left" for="site_qq"> 客服QQ </label>
+
+                                    <div class="col-sm-9">
+                                        <input class="input-xxlarge" type="text" id="site_qq" name="site_qq" value="<?php echo $setting['site_qq']?>" />
+                                    </div>
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <label class="col-sm-3 control-label no-padding-left"></label>
+                                    <button class="btn btn-info" type="button" id="btn-submit">
+                                        <i class="icon-ok bigger-110"></i>
+                                        保存
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include $view_path . '/common/foot.html'?>
+<script type="text/javascript">
+$(function() {
+    var loading = bootbox.loading().modal('hide');
+
+    $('#btn-submit').bind('click', function() {
+        data = document.buildFormJson( $("#form") )
+
+        var loading = bootbox.loading();
+        $.ajax ({
+            type:'POST',
+            data: data,
+            dataType:'json',
+            url: '/ajax/setting/save',
+            success: function(response) {
+                bootbox.alert(response.message, function() {
+                    if ( ! response.code ) window.location.reload();
+                });
+            },
+            error: function() {
+                bootbox.alert('服务器问题，请重试');
+            },
+            complete:function() {
+                loading.modal('hide');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

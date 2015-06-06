@@ -1,8 +1,8 @@
 <?php
 /**
- * Member Model
+ * Manager Model
  * @author Lancer He <lancer.he@gmail.com>
- * @since  2014-11-17
+ * @since  2015-06-06
  */
 Class Model_Manager extends \Core\Model\Medoo {
 
