@@ -102,18 +102,18 @@
 <script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.min.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
-    bootbox.bindDobuleFrameEvent('add', '/ajax/page/addpopup', '/ajax/page/create', function($btn) {
-        return "创建新页面";
-    })
+    // bootbox.bindDobuleFrameEvent('add', '/ajax/page/addpopup', '/ajax/page/create', function($btn) {
+    //     return "创建新分类";
+    // })
 
-    bootbox.bindDobuleFrameEvent('edit', '/ajax/page/editpopup', '/ajax/page/save', function($btn) {
-        return "编辑页面「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
-    })
+    // bootbox.bindDobuleFrameEvent('edit', '/ajax/page/editpopup', '/ajax/page/save', function($btn) {
+    //     return "编辑页面「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+    // })
 
-    bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
-        var title = $btn.parents('tr').find('[data-label=title]').text();
-        return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
-    });
+    // bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
+    //     var title = $btn.parents('tr').find('[data-label=title]').text();
+    //     return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
+    // });
 });
 </script>
 </body>

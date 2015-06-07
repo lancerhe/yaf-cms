@@ -73,7 +73,7 @@ class Entity extends Core_Entity {
         $this->setProperty('updatetime', time());
         $this->setProperty('deleted', 1);
         $model = new \Model_Manager();
-        $model->updateRowByPk($this->_properties['mid'], $this->_changed);
+        $model->updateRowsByPk($this->_properties['mid'], $this->_changed);
     }
 
     /**
@@ -85,7 +85,7 @@ class Entity extends Core_Entity {
         $Validate->edit();
         $this->setProperty('updatetime', time());
         $model = new \Model_Manager();
-        $model->updateRowByPk($this->_properties['mid'], $this->_changed);
+        $model->updateRowsByPk($this->_properties['mid'], $this->_changed);
     }
 
     /**

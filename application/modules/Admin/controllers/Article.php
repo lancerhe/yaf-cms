@@ -7,7 +7,6 @@
 
 class Controller_Article extends \Core\Controller\Admin {
 
-
     public function IndexAction() {
         $QueryList = new \Service\Article\QueryList();
         $QueryList->setLimit( $this->getPageStart(), $this->getPageLimit() );
@@ -31,7 +30,7 @@ class Controller_Article extends \Core\Controller\Admin {
     }
 
     public function CateAction() {
-        $rows  = (new Service\Article\Cate)->queryTreeList();
+        $rows  = (new Service\Article\Cate)->queryTreeRecords();
         $this->getView()->assign('rows', $rows);
         $this->getView()->display('article/cate.html');
     }

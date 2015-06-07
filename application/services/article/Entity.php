@@ -59,14 +59,14 @@ class Entity extends Core_Entity {
         $this->setProperty('deleted',    1);
         $this->setProperty('updatetime', time());
         $model = new \Model_Page();
-        $model->updateRowByPk($this->_properties['id'], $this->_changed);
+        $model->updateRowsByPk($this->_properties['id'], $this->_changed);
     }
 
     public function save() {
         (new Validate($this))->save();
         $this->setProperty('updatetime',  time());
         $model = new \Model_Page();
-        $model->updateRowByPk($this->_properties['id'], $this->_changed);
+        $model->updateRowsByPk($this->_properties['id'], $this->_changed);
     }
 
     public function create() {

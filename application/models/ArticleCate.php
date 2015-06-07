@@ -36,9 +36,24 @@ Class Model_ArticleCate extends \Core\Model\Medoo {
         }
     }
 
-    public function fetchListRecursion($tree=[], $depth=-1, $return=[]) {
-        if ( empty($tree) ) 
+    public function fetchById($id) {
+        return isset($this->_cid_to_assoc[$id]) ? $this->_cid_to_assoc[$id] : false;
+    }
+
+    public function fetchTreeRecursionByFid($fid) {
+        return $this->fetchTreeRecursion($this->_fid_assoc, $fid);
+    }
+
+    public function fetchListRecursionByFid($fid) {
+        $tree = $this->fetchTreeRecursionByFid($fid);
+        return $this->fetchListRecursion($tree);
+    }
+
+    public function fetchListRecursion($tree=null, $depth=-1, $return=[]) {
+        if ( is_null($tree) ) 
             $tree = $this->fetchTreeRecursion();
+
+        if ( empty($tree) ) return [];
 
         $depth ++;
         foreach ($tree as $row) {
@@ -56,12 +71,14 @@ Class Model_ArticleCate extends \Core\Model\Medoo {
         return $return;
     }
 
-    public function fetchTreeRecursion($fid_assoc=array(), $fid=0) {
-        if ( empty($fid_assoc) )
+    public function fetchTreeRecursion($fid_assoc=null, $fid=0) {
+        if ( is_null($fid_assoc) )
             $fid_assoc = $this->_fid_assoc;
 
+        if ( empty($fid_assoc) ) return [];
+
         $return = array();
-        if ( ! is_array($fid_assoc[$fid]) )
+        if ( ! isset($fid_assoc[$fid]) )
             return false;
 
         foreach ($fid_assoc[$fid] AS $row) {

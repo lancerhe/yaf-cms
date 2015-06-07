@@ -48,7 +48,7 @@ class Medoo {
         return $this->medoo()->count($this->_table, $condition);
     }
 
-    public function updateRowByPk($pk, $row) {
+    public function updateRowsByPk($pk, $row) {
         if ( ! $affect = $this->medoo()->update($this->_table, $row, [$this->_pk => $pk]) ) {
             throw new DatabaseWriteException();
         }
