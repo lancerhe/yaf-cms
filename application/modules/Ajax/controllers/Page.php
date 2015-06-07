@@ -29,6 +29,25 @@ class Controller_Page extends \Core\Controller\Ajax {
         $Query->filterTrash();
         
         $this->getView()->assign('row', $Query->getAssoc());
+        $this->getView()->assign('content', $Query->getEntity()->content);
         $this->getView()->display('渲染成功', $this->getView()->render('page/edit.html') );
+    }
+
+    /**
+     * 保存
+     */
+    public function SaveAction() {
+        $id = intval( $this->getRequest()->getPost('id') );
+        $Query = new \Service\Page\Query($id);
+        $Query->filterTrash();
+
+        $Entity = $Query->getEntity();
+        $Entity->title   = $this->getRequest()->getPost('title');
+        $Entity->cname   = $this->getRequest()->getPost('cname');
+        $Entity->keyword = $this->getRequest()->getPost('keyword');
+        $Entity->desc    = $this->getRequest()->getPost('desc');
+        $Entity->content = $this->getRequest()->getPost('content');
+        $Entity->save();
+        $this->getView()->display('保存成功');
     }
 }

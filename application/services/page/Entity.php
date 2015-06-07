@@ -26,6 +26,34 @@ class Entity extends Core_Entity {
         return PUBLIC_URL . "/page/" . $this->_properties['cname'];
     }
 
+    public function setTitle($title) {
+        $this->_properties['title'] = trim($title);
+    }
+
+    public function setCname($cname) {
+        $cname = trim($cname);
+        $cname = str_replace(" ", "", $cname);
+        $this->_properties['cname'] = $cname;
+    }
+
+    public function setKeyword($keyword) {
+        $keyword = trim($keyword);
+        $keyword = str_replace("，", ",", $keyword);
+        $this->_properties['keyword'] = $keyword;
+    }
+
+    public function setDesc($desc) {
+        $this->_properties['desc'] = trim($desc);
+    }
+
+    public function setContent($content) {
+        $this->_properties['content'] = $content;
+    }
+
+    public function getContent($content) {
+        return htmlspecialchars_decode($this->_properties['content']);
+    }
+
     public function trash() {
         $this->setProperty('deleted',    1);
         $this->setProperty('updatetime', time());
@@ -33,13 +61,9 @@ class Entity extends Core_Entity {
         $model->updateRowByPk($this->_properties['id'], $this->_changed);
     }
 
-    // public function publish() {
-    //     $this->setProperty('createtime',  time());
-    //     $this->setProperty('publishtime', time());
-    //     $this->setProperty('publishdate', date('Y-m-d', time()));
-    //     $this->setProperty('status',      2);
-    //     $this->setProperty('reply',       '您的报修请求已收到，我们将尽快处理');
-    //     $model = new \Model_Call();
-    //     $this->setProperty('id', $model->insertRow($this->_properties) );
-    // }
+    public function save() {
+        $this->setProperty('updatetime',  time());
+        $model = new \Model_Page();
+        $model->updateRowByPk($this->_properties['id'], $this->_changed);
+    }
 }
