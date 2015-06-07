@@ -8,8 +8,7 @@
 namespace Service\Manager;
 
 use Service\Manager\Entity;
-use Service\Manager\Exception\NotFoundException;
-use Service\Manager\Exception\HasTrashException;
+use Core\Exception\ResourceNotFoundException;
 use Service\Core\Query as Core_Query;
 
 class Query extends Core_Query {
@@ -32,10 +31,10 @@ class Query extends Core_Query {
         $model = new \Model_Manager();
         $row   = $model->fetchRowByPk($mid);
         if ( empty($row) ) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
         $this->_assoc  = $row;
-        $this->_entity = new Entity($row);
+        $this->_Entity = new Entity($row);
     }
 
     /**
@@ -47,19 +46,9 @@ class Query extends Core_Query {
         $model = new \Model_Manager();
         $rows  = $model->fetchRowsByCondition(["username" => $username]);
         if ( ! isset($rows[0]) ) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
         $this->_assoc  = $rows[0];
-        $this->_entity = new Entity($rows[0]);
-    }
-
-    /**
-     * 过滤已删除
-     * @return void|exception
-     */
-    public function filterTrash() {
-        if ( $this->_entity->isTrash() ) {
-            throw new HasTrashException();
-        }
+        $this->_Entity = new Entity($rows[0]);
     }
 }
