@@ -72,6 +72,7 @@ class Entity extends Core_Entity {
     public function create() {
         (new Validate($this))->create();
         $this->setProperty('createtime',  time());
+        $this->setProperty('updatetime',  time());
         $model = new \Model_Page();
         $this->_properties['id'] = $model->insertRow($this->_properties);
     }
