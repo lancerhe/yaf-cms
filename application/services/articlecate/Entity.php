@@ -41,7 +41,7 @@ class Entity extends Core_Entity {
         $this->setProperty('createtime',  time());
         $this->setProperty('updatetime',  time());
         $model = new \Model_ArticleCate();
-        $this->_properties['cid'] = $model->insertRow($this->_properties);
+        $this->setProperty('cid', $model->insertRow($this->_properties) );
     }
 
     public function save() {

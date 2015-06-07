@@ -74,6 +74,6 @@ class Entity extends Core_Entity {
         $this->setProperty('createtime',  time());
         $this->setProperty('updatetime',  time());
         $model = new \Model_Page();
-        $this->_properties['id'] = $model->insertRow($this->_properties);
+        $this->setProperty('id', $model->insertRow($this->_properties) );
     }
 }
