@@ -12,23 +12,19 @@ use Core\Exception\ResourceNotFoundException;
 
 class Query extends Core_Query {
 
+    public $Model;
+
     /**
      * 初始化查询类
      * @param mixed $page  PAGE ID/PAGE CNAME
      * @param void
      */
     public function __construct($page) {
+        $this->Model = new \Model_Page();
         is_numeric($page) ? $this->fetchById($page) : $this->fetchByCname($page);
     }
 
-    /**
-     * 以ID进行检索
-     * @param int $id
-     * @param void
-     */
-    public function fetchById($id) {
-        $model = new \Model_Page();
-        $row   = $model->fetchRowByPk($id);
+    protected function _init($row) {
         if ( empty($row) ) {
             throw new ResourceNotFoundException();
         }
@@ -37,17 +33,20 @@ class Query extends Core_Query {
     }
 
     /**
+     * 以ID进行检索
+     * @param int $id
+     * @param void
+     */
+    public function fetchById($id) {
+        $this->_init($this->Model->fetchRowByPk($id));
+    }
+
+    /**
      * 以CNAME进行检索
      * @param string $cname 
      * @param void
      */
     public function fetchByCname($cname) {
-        $model = new \Model_Page();
-        $rows  = $model->fetchRowsByCondition(["cname" => $cname]);
-        if ( ! isset($rows[0]) ) {
-            throw new ResourceNotFoundException();
-        }
-        $this->_assoc  = $rows[0];
-        $this->_Entity = new Entity($rows[0]);
+        $this->_init($this->Model->fetchRowsByCondition(["cname" => $cname])[0]);
     }
 }
