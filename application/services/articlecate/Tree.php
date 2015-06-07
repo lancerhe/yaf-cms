@@ -4,11 +4,9 @@
  * @since  2015-06-07
  */
 
-namespace Service\Article;
+namespace Service\ArticleCate;
 
-use Core\Exception\ResourceNotFoundException;
-
-class Cate {
+class Tree {
 
     protected $_tree;
 
@@ -18,12 +16,12 @@ class Cate {
         $this->_Model = (new \Model_ArticleCate());
     }
 
-    public function queryTreeRecords() {
+    public function queryAll() {
         return $this->_Model->fetchListRecursion();
     }
 
     public function queryTreeOptionsList() {
-        $records = $this->queryTreeRecords();
+        $records = $this->queryAll();
         $list = [];
         foreach ($records as $record) {
             $list[$record['cid']] = str_repeat("&#160;&#160;&#160;&#160;", $record['depth']) . '┕' . $record['name'];
@@ -33,7 +31,7 @@ class Cate {
 
     public function queryTreeOptionsListWithoutId($id) {
         $ids     = $this->queryChildrenIdsAndSelfId($id);
-        $records = $this->queryTreeRecords();
+        $records = $this->queryAll();
         $list = [];
         foreach ($records as $record) {
             if ( in_array( $record['cid'], $ids) ) continue;
@@ -53,13 +51,5 @@ class Cate {
             $ids = \Util_Array::column($children, 'cid');
         }
         return $ids;
-    }
-
-    public function trash($id) {
-        if ( false === $cate = $this->_Model->fetchById($id) ) {
-            throw new ResourceNotFoundException();
-        }
-        $trash_ids = $this->queryChildrenIdsAndSelfId($id);
-        $this->_Model->updateRowsByPk($trash_ids, ["deleted" => 1, "updatetime" => time()]);
     }
 }

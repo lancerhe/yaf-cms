@@ -30,7 +30,7 @@ class Controller_Article extends \Core\Controller\Admin {
     }
 
     public function CateAction() {
-        $rows  = (new Service\Article\Cate)->queryTreeRecords();
+        $rows  = (new Service\ArticleCate\Tree())->queryAll();
         $this->getView()->assign('rows', $rows);
         $this->getView()->display('article/cate.html');
     }

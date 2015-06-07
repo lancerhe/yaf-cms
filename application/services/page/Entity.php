@@ -24,27 +24,27 @@ class Entity extends Core_Entity {
     ];
 
     public function setTitle($title) {
-        $this->_properties['title'] = trim($title);
+        $this->setProperty('title', trim($title));
     }
 
     public function setCname($cname) {
         $cname = trim($cname);
         $cname = str_replace(" ", "", $cname);
-        $this->_properties['cname'] = $cname;
+        $this->setProperty('cname', $cname);
     }
 
     public function setKeyword($keyword) {
         $keyword = trim($keyword);
         $keyword = str_replace("，", ",", $keyword);
-        $this->_properties['keyword'] = $keyword;
+        $this->setProperty('keyword', $keyword);
     }
 
     public function setDesc($desc) {
-        $this->_properties['desc'] = trim($desc);
+        $this->setProperty('desc', trim($desc));
     }
 
     public function setContent($content) {
-        $this->_properties['content'] = $content;
+        $this->setProperty('content', $content);
     }
 
     public function getContent($content) {
