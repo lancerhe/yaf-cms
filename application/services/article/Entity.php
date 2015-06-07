@@ -52,7 +52,25 @@ class Entity extends Core_Entity {
     }
 
     public function setContent($content) {
+        $nohtml_content = strip_tags($content);
+        $nohtml_content = preg_replace("/\s/","", $nohtml_content);
         $this->setProperty('content', $content);
+        if ( empty($this->_properties['intro']) ) {
+            $this->setProperty('intro', \Util_String::cutString($nohtml_content, 200) );
+        }
+
+        if ( empty($this->_properties['desc']) ) {
+            $this->setProperty('desc', \Util_String::cutString($nohtml_content, 200, '') );
+        }
+        /* set has attachment */
+        preg_match_all("/<img([^>]*)src=\"".str_replace("/", "\/", PUBLIC_URL)."\/upload\/([^\"]*)\"([^>]*)\>/", $content, $matchs);
+        if ( is_array($matchs[2]) AND count($matchs[2]) > 0) {
+            $this->setProperty('hasimage', 1);
+            $this->setProperty('thumbnails', json_encode($matchs[2]));
+        } else {
+            $this->setProperty('hasimage', 0);
+            $this->setProperty('thumbnails', json_encode([]));
+        }
     }
 
     public function getContent($content) {
