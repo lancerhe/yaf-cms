@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php include $view_path . '/common/head.html'?>
+<style type="text/css">
+.modal-dialog {width: 860px;}
+</style>
+<link href="/assets/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+
+<body>
+<?php include $view_path . '/common/headbar.html'?>
+<div class="main-container" id="main-container">
+    <div class="main-container-inner">
+        <?php include $view_path . '/common/navbar.html'?>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+                </script>
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="/admin/index/index">控制板</a>
+                    </li>
+                    <li class="active">文章管理</li>
+                </ul>
+            </div>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        文章管理
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            文章分类
+                        </small>
+                        <small>
+                            <a href="/admin/article/index">文章列表</a>
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table style="table-layout:fixed" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="center" width="5%">ID</th>
+                                                <th width="40%">名称</th>
+                                                <th width="25%">唯一标识</th>
+                                                <th width="25%">
+                                                    <button data-btn="add" class="btn btn-xs btn-primary">
+                                                        <i class="icon-plus bigger-100"></i>
+                                                        创建分类
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($rows as $row) :?>
+                                            <tr data-id="<?php echo $row['cid']?>">
+                                                <td class="center"><?php echo $row['cid']?></td>
+                                                <td data-label="name">
+                                                    <p style="float:left;padding-right:5px;padding-left:<?php echo (30 * $row['depth'])?>px">├─ </p>
+                                                    <?php echo $row['name']?>
+                                                </td>
+                                                <td data-label="cname"><?php echo $row['cname']?></td>
+                                                <td>
+                                                    <button data-btn="edit" class="btn btn-xs btn-primary">
+                                                        <i class="icon-edit bigger-100"></i>
+                                                        编辑
+                                                    </button>
+                                                    <button data-btn="trash" class="btn btn-xs btn-danger">
+                                                        <i class="icon-trash bigger-100"></i>
+                                                        删除
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach;?>
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div><!-- /span -->
+                        </div><!-- /row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include $view_path . '/common/foot.html'?>
+
+<script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.min.js"></script>
+<script type="text/javascript">
+jQuery(function($) {
+    bootbox.bindDobuleFrameEvent('add', '/ajax/page/addpopup', '/ajax/page/create', function($btn) {
+        return "创建新页面";
+    })
+
+    bootbox.bindDobuleFrameEvent('edit', '/ajax/page/editpopup', '/ajax/page/save', function($btn) {
+        return "编辑页面「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+    })
+
+    bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
+        var title = $btn.parents('tr').find('[data-label=title]').text();
+        return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
+    });
+});
+</script>
+</body>
+</html>
