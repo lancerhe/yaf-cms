@@ -38,12 +38,12 @@ class Query extends Core_Query {
 
     /**
      * 以CNAME进行检索
-     * @param string $username 管理员用户名
+     * @param string $cname 
      * @param void
      */
-    public function fetchByCname($username) {
-        $model = new \Model_Manager();
-        $rows  = $model->fetchRowsByCondition(["username" => $username]);
+    public function fetchByCname($cname) {
+        $model = new \Model_Page();
+        $rows  = $model->fetchRowsByCondition(["cname" => $cname]);
         if ( ! isset($rows[0]) ) {
             throw new ResourceNotFoundException();
         }

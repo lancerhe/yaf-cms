@@ -101,7 +101,7 @@ jQuery(function($) {
     })
 
     bootbox.bindDobuleFrameEvent('edit', '/ajax/articlecate/editpopup', '/ajax/articlecate/save', function($btn) {
-        return "编辑分类「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+        return "编辑分类「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=name]').text() + "</span></b>」";
     })
 
     bootbox.bindConfirmEvent('trash', '删除', '/ajax/articlecate/trash', function($btn) {
