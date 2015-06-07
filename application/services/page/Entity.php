@@ -7,6 +7,7 @@
 namespace Service\Page;
 
 use Service\Core\Entity as Core_Entity;
+use Service\Page\Validate;
 
 class Entity extends Core_Entity {
 
@@ -21,10 +22,6 @@ class Entity extends Core_Entity {
         'updatetime' => 0,
         'deleted'    => 0,
     ];
-
-    public function getUrl() {
-        return PUBLIC_URL . "/page/" . $this->_properties['cname'];
-    }
 
     public function setTitle($title) {
         $this->_properties['title'] = trim($title);
@@ -54,6 +51,10 @@ class Entity extends Core_Entity {
         return htmlspecialchars_decode($this->_properties['content']);
     }
 
+    public function getUrl() {
+        return PUBLIC_URL . "/page/" . $this->_properties['cname'];
+    }
+
     public function trash() {
         $this->setProperty('deleted',    1);
         $this->setProperty('updatetime', time());
@@ -62,6 +63,7 @@ class Entity extends Core_Entity {
     }
 
     public function save() {
+        (new Validate($this))->save();
         $this->setProperty('updatetime',  time());
         $model = new \Model_Page();
         $model->updateRowByPk($this->_properties['id'], $this->_changed);
