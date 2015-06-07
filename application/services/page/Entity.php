@@ -68,4 +68,11 @@ class Entity extends Core_Entity {
         $model = new \Model_Page();
         $model->updateRowByPk($this->_properties['id'], $this->_changed);
     }
+
+    public function create() {
+        (new Validate($this))->create();
+        $this->setProperty('createtime',  time());
+        $model = new \Model_Page();
+        $this->_properties['id'] = $model->insertRow($this->_properties);
+    }
 }

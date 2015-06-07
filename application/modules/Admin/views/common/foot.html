@@ -24,6 +24,8 @@
                 '| justifyleft justifycenter justifyright justifyjustify |',
                 'link unlink | image video preview'
             ]
+            ,initialFrameWidth: 820
+            ,initialFrameHeight: 240
         };
         bootbox.setDefaults({
             locale: "zh_CN",
@@ -67,7 +69,7 @@
         }
 
         bootbox.bindDobuleFrameEvent = function(btn, request_uri, handler_uri, title_callback) {
-            $('[data-btn=edit]').on(ace.click_event, function() {
+            $('[data-btn='+btn+']').on(ace.click_event, function() {
                 var id      = $(this).parents('tr').attr('data-id');
                 var title   = title_callback( $(this) );
                 var loading = bootbox.loading();

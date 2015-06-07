@@ -52,7 +52,12 @@
                                                 <th width="15%">标题</th>
                                                 <th width="40%">前台访问地址</th>
                                                 <th width="10%">创建时间</th>
-                                                <th width="25%"></th>
+                                                <th width="25%">
+                                                    <button data-btn="add" class="btn btn-xs btn-primary">
+                                                        <i class="icon-plus bigger-100"></i>
+                                                        创建页面
+                                                    </button>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -94,8 +99,12 @@
 <script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.min.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
-    bootbox.bindDobuleFrameEvent('edit', '/ajax/page/edit', '/ajax/page/save', function($btn) {
-        return "编辑单页「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+    bootbox.bindDobuleFrameEvent('add', '/ajax/page/addpopup', '/ajax/page/create', function($btn) {
+        return "创建新页面";
+    })
+
+    bootbox.bindDobuleFrameEvent('edit', '/ajax/page/editpopup', '/ajax/page/save', function($btn) {
+        return "编辑页面「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
     })
 
     bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {

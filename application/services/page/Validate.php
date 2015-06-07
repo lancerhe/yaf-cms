@@ -18,10 +18,14 @@ class Validate {
         $this->Entity = $Entity;
     }
 
-    public function save() {
+    public function create() {
         $this->_fieldTitle();
         $this->_fieldCName();
         $this->_hasCNameExist();
+    }
+
+    public function save() {
+        $this->create();
     }
 
     protected function _hasCNameExist() {
