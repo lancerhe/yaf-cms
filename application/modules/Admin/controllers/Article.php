@@ -8,14 +8,17 @@
 class Controller_Article extends \Core\Controller\Admin {
 
     public function IndexAction() {
+        $MergeCate = new \Service\ArticleCate\Merge();
         $QueryList = new \Service\Article\QueryList();
         $QueryList->setLimit( $this->getPageStart(), $this->getPageLimit() );
         $QueryList->setOrderForManager();
         $assoc  = $QueryList->fetchAll();
+        $assoc  = $MergeCate->muti($assoc);
+
         $render = [];
         foreach ($assoc as $row) {
             $Entity     = new \Service\Article\Entity($row);
-            $row['url'] = $Entity->getUrl();
+            // $row['url'] = $Entity->getUrl();
             $render[] = $row;
         }
 

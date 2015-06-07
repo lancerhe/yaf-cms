@@ -19,7 +19,7 @@ class QueryList {
     ];
 
     public function __construct() {
-        $this->_model = new \Model_Page();
+        $this->_model = new \Model_Article();
     }
 
     public function setLimit($start, $limit) {

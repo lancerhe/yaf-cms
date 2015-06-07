@@ -2,7 +2,7 @@
 /**
  * Article Cate Model
  * @author Lancer He <lancer.he@gmail.com>
- * @since  2015-06-06
+ * @since  2015-06-07
  */
 Class Model_ArticleCate extends \Core\Model\Medoo {
 
@@ -34,6 +34,10 @@ Class Model_ArticleCate extends \Core\Model\Medoo {
                 'name'  => $row['name']
             ];
         }
+    }
+
+    public function fetchListGroupById() {
+        return $this->_cid_to_assoc;
     }
 
     public function fetchById($id) {

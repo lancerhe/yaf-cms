@@ -12,68 +12,69 @@ use Service\Core\Entity as Core_Entity;
 class Entity extends Core_Entity {
 
     protected $_properties = [
-        'id'         => 0,
-        'title'      => '',
-        'cname'      => '',
-        'keyword'    => '',
-        'desc'       => '',
-        'content'    => '',
-        'createtime' => 0,
-        'updatetime' => 0,
-        'deleted'    => 0,
+        'id'          => 0,
+        'cid'         => 0,
+        'title'       => '',
+        'intro'       => '',
+        'keyword'     => '',
+        'desc'        => '',
+        'content'     => '',
+        'thumbnails'  => '',
+        'hasimage'    => 0,
+        'views'       => 0,
+        'top'         => 0,
+        'createtime'  => 0,
+        'updatetime'  => 0,
+        'publishdate' => '',
+        'deleted'     => 0,
     ];
 
     public function setTitle($title) {
-        $this->_properties['title'] = trim($title);
+        $this->setProperty('title', trim($title));
     }
 
-    public function setCname($cname) {
-        $cname = trim($cname);
-        $cname = str_replace(" ", "", $cname);
-        $this->_properties['cname'] = $cname;
+    public function setCid($cid) {
+        $this->setProperty('cid', intval($cid));
     }
 
     public function setKeyword($keyword) {
         $keyword = trim($keyword);
         $keyword = str_replace("，", ",", $keyword);
-        $this->_properties['keyword'] = $keyword;
+        $this->setProperty('keyword', $keyword);
     }
 
     public function setDesc($desc) {
-        $this->_properties['desc'] = trim($desc);
+        $this->setProperty('desc', trim($desc));
+    }
+
+    public function setPublishDate($date) {
+        $this->setProperty('publishdate', date('Y-m-d', strtotime($date)) );
     }
 
     public function setContent($content) {
-        $this->_properties['content'] = $content;
+        $this->setProperty('content', $content);
     }
 
     public function getContent($content) {
         return htmlspecialchars_decode($this->_properties['content']);
     }
 
-    public function getUrl() {
-        return PUBLIC_URL . "/page/" . $this->_properties['cname'];
-    }
-
     public function trash() {
         $this->setProperty('deleted',    1);
         $this->setProperty('updatetime', time());
-        $model = new \Model_Page();
-        $model->updateRowsByPk($this->_properties['id'], $this->_changed);
+        (new \Model_Article())->updateRowsByPk($this->_properties['id'], $this->_changed);
     }
 
     public function save() {
         (new Validate($this))->save();
         $this->setProperty('updatetime',  time());
-        $model = new \Model_Page();
-        $model->updateRowsByPk($this->_properties['id'], $this->_changed);
+        (new \Model_Article())->updateRowsByPk($this->_properties['id'], $this->_changed);
     }
 
     public function create() {
         (new Validate($this))->create();
         $this->setProperty('createtime',  time());
         $this->setProperty('updatetime',  time());
-        $model = new \Model_Page();
-        $this->_properties['id'] = $model->insertRow($this->_properties);
+        $this->setProperty('id', (new \Model_Article())->insertRow($this->_properties) );
     }
 }

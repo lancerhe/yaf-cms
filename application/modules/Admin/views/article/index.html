@@ -3,6 +3,7 @@
 <?php include $view_path . '/common/head.html'?>
 <style type="text/css">
 .modal-dialog {width: 860px;}
+.datepicker{z-index:11510 !important;}
 </style>
 <link href="/assets/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 
@@ -52,13 +53,13 @@
                                         <thead>
                                             <tr>
                                                 <th class="center" width="5%">ID</th>
-                                                <th width="15%">标题</th>
-                                                <th width="40%">前台访问地址</th>
-                                                <th width="10%">编辑时间</th>
+                                                <th width="15%">分类</th>
+                                                <th width="40%">标题</th>
+                                                <th width="10%">发布时间</th>
                                                 <th width="25%">
                                                     <button data-btn="add" class="btn btn-xs btn-primary">
                                                         <i class="icon-plus bigger-100"></i>
-                                                        创建页面
+                                                        添加文章
                                                     </button>
                                                 </th>
                                             </tr>
@@ -67,9 +68,9 @@
                                             <?php foreach ($rows as $row) :?>
                                             <tr data-id="<?php echo $row['id']?>">
                                                 <td class="center"><?php echo $row['id']?></td>
+                                                <td data-label="cate"><?php echo $row['cate']['name']?></td>
                                                 <td data-label="title"><?php echo $row['title']?></td>
-                                                <td data-label="url"><a target="_blank" href="<?php echo $row['url']?>"><?php echo $row['url']?></a></td>
-                                                <td data-label="updatetime"><?php echo date('Y-m-d', $row['updatetime'])?></td>
+                                                <td data-label="publishdate"><?php echo $row['publishdate']?></td>
                                                 <td>
                                                     <button data-btn="edit" class="btn btn-xs btn-primary">
                                                         <i class="icon-edit bigger-100"></i>
@@ -100,20 +101,21 @@
 
 <script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/assets/umeditor/umeditor.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/assets/js/date-time/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
-    // bootbox.bindDobuleFrameEvent('add', '/ajax/page/addpopup', '/ajax/page/create', function($btn) {
-    //     return "创建新分类";
-    // })
+    bootbox.bindDobuleFrameEvent('add', '/ajax/article/addpopup', '/ajax/article/create', function($btn) {
+        return "添加新文章";
+    })
 
-    // bootbox.bindDobuleFrameEvent('edit', '/ajax/page/editpopup', '/ajax/page/save', function($btn) {
-    //     return "编辑页面「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
-    // })
+    bootbox.bindDobuleFrameEvent('edit', '/ajax/article/editpopup', '/ajax/article/save', function($btn) {
+        return "编辑文章「<b><span class=\"text-danger\">" + $btn.parents('tr').find('[data-label=title]').text() + "</span></b>」";
+    })
 
-    // bootbox.bindConfirmEvent('trash', '删除', '/ajax/page/trash', function($btn) {
-    //     var title = $btn.parents('tr').find('[data-label=title]').text();
-    //     return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
-    // });
+    bootbox.bindConfirmEvent('trash', '删除', '/ajax/article/trash', function($btn) {
+        var title = $btn.parents('tr').find('[data-label=title]').text();
+        return "确认要「<b><span class=\"text-danger\">"+title+"</span></b>」该单页吗？";
+    });
 });
 </script>
 </body>
