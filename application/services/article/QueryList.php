@@ -7,6 +7,7 @@
 namespace Service\Article;
 
 use Service\Article\Entity;
+use Service\ArticleCate\Tree as CateTree;
 
 class QueryList {
 
@@ -32,6 +33,24 @@ class QueryList {
         $this->_condition['ORDER'] = [
             'createtime ASC', 
         ];
+    }
+
+    public function setOrderByVisitor() {
+        $this->_condition['ORDER'] = [
+            'publishdate DESC',
+        ];
+    }
+
+    public function setCName($cname, $children=false) {
+        $ModelCate = new \Model_ArticleCate();
+        if ( false === $cate = $ModelCate->fetchByCName($cname) ) {
+            $this->_condition['AND']['cid'] = 0;
+            return;
+        }
+        if ( $children ) 
+            $this->_condition['AND']['cid'] = (new CateTree())->queryChildrenIdsAndSelfId($cate['cid']);
+        else 
+            $this->_condition['AND']['cid'] = (new CateTree())->queryChildrenIds($cate['cid']);
     }
 
     public function fetchCount() {

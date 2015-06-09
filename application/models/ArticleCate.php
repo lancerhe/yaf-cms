@@ -22,11 +22,13 @@ Class Model_ArticleCate extends \Core\Model\Medoo {
         foreach ($rows AS $row) {
             $this->_cname_to_assoc[$row['cname']] = [
                 'cid'  => $row['cid'],
-                'name' => $row['name']
+                'name' => $row['name'],
+                'fid'  => $row['fid'],
             ];
             $this->_cid_to_assoc[$row['cid']] = [
                 'cname' => $row['cname'],
-                'name'  => $row['name']
+                'name'  => $row['name'],
+                'fid'  => $row['fid'],
             ];
             $this->_fid_assoc[$row['fid']][] = [
                 'cid'   => $row['cid'],
@@ -38,6 +40,10 @@ Class Model_ArticleCate extends \Core\Model\Medoo {
 
     public function fetchListGroupById() {
         return $this->_cid_to_assoc;
+    }
+
+    public function fetchByCName($cname) {
+        return isset($this->_cname_to_assoc[$cname]) ? $this->_cname_to_assoc[$cname] : false;
     }
 
     public function fetchById($id) {
