@@ -63,4 +63,15 @@ class Admin extends \Core\Controller {
     public function getPageStart() {
         return ($this->getCurrentPage() - 1) * $this->getPageLimit();
     }
+
+    /**
+     * 渲染分页
+     */
+    public function renderPagination($count) {
+        $Page = new \Util_Page();
+        $Page->setCurrentPage($this->getCurrentPage());
+        $Page->setPageSize($this->getPageLimit());
+        $Page->setTotalNum($count);
+        $this->getView()->assign('pagination', $Page->output());
+    }
 }

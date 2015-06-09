@@ -20,13 +20,8 @@ class Controller_Page extends \Core\Controller\Admin {
             $render[] = $row;
         }
 
-        $Page = new \Util_Page();
-        $Page->setCurrentPage($this->getCurrentPage());
-        $Page->setPageSize($this->getPageLimit());
-        $Page->setTotalNum($QueryList->fetchCount());
-
+        $this->renderPagination($QueryList->fetchCount());
         $this->getView()->assign('rows', $render);
-        $this->getView()->assign('pagination', $Page->output());
         $this->getView()->display('page/index.html');
     }
 }
