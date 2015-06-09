@@ -66,7 +66,7 @@ class QueryList {
             $this->_condition['AND']['cid'] = 0;
             return;
         }
-        $this->_condition['AND']['cid'] = $children ? (new CateTree())->queryChildrenIdsAndSelfId($cid) : $cid;
+        $this->_condition['AND']['cid'] = $children ? (new CateTree())->queryChildrenIdsAndSelfId($cate['cid']) : $cate['cid'];
     }
 
     public function fetchCount() {

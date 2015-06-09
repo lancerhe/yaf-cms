@@ -7,4 +7,9 @@
  */
 namespace Core\Controller;
 
-class Index extends \Core\Controller {}
+class Index extends \Core\Controller {
+
+    public function init() {
+        $this->getView()->assign('setting', (new \Service\Setting\Query())->getAssoc());
+    }
+}
