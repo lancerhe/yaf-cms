@@ -44,8 +44,32 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-
                         <!-- PAGE CONTENT BEGINS -->
+
+                        <div class="well">
+                            <form class="form-inline" method="get">
+                                <div class="row">
+                                    <div class="col-xs-9">
+                                        <label for="s-title">名称</label>
+                                        <input type="text" name="title" id="s-title" value="<?php echo isset($_GET['title']) ? $_GET['title'] : ''?>" class="input-large" placeholder="输入标题关键词">
+                                        <label for="s-cid">分类</label>
+                                        <select name="cid" id="s-cid">
+                                            <?php echo $cate_options?>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="icon-search bigger-110"></i>
+                                            查询
+                                        </button>
+                                        <button type="button" class="btn btn-inverse btn-sm" onclick="window.location.href='/community'">
+                                            <i class="icon-refresh bigger-110"></i>
+                                            重置
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="table-responsive">

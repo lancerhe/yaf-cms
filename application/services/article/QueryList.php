@@ -11,7 +11,9 @@ use Service\ArticleCate\Tree as CateTree;
 
 class QueryList {
 
-    protected $_model = null;
+    protected $_Model;
+
+    protected $_Model_Cate;
 
     protected $_condition = [
         'AND' => [
@@ -20,7 +22,8 @@ class QueryList {
     ];
 
     public function __construct() {
-        $this->_model = new \Model_Article();
+        $this->_Model      = new \Model_Article();
+        $this->_Model_Cate = new \Model_ArticleCate();
     }
 
     public function setLimit($start, $limit) {
@@ -41,28 +44,41 @@ class QueryList {
         ];
     }
 
-    public function setCName($cname, $children=false) {
-        $ModelCate = new \Model_ArticleCate();
-        if ( false === $cate = $ModelCate->fetchByCName($cname) ) {
+    public function setTitle($title) {
+        $title = trim($title);
+        if ( ! $title ) return;
+        $this->_condition['AND']['title[~]'] = $title;
+    }
+
+    public function setCid($cid, $children=false) {
+        if ( ! $cid ) return;
+        if ( false === $cate = $this->_Model_Cate->fetchById($cid) ) {
             $this->_condition['AND']['cid'] = 0;
             return;
         }
-        if ( $children ) 
-            $this->_condition['AND']['cid'] = (new CateTree())->queryChildrenIdsAndSelfId($cate['cid']);
-        else 
-            $this->_condition['AND']['cid'] = (new CateTree())->queryChildrenIds($cate['cid']);
+        $this->_condition['AND']['cid'] = $children ? (new CateTree())->queryChildrenIdsAndSelfId($cid) : $cid;
+    }
+
+    public function setCName($cname, $children=false) {
+        $cname = trim($cname);
+        if ( ! $cname ) return;
+        if ( false === $cate = $this->_Model_Cate->fetchByCName($cname) ) {
+            $this->_condition['AND']['cid'] = 0;
+            return;
+        }
+        $this->_condition['AND']['cid'] = $children ? (new CateTree())->queryChildrenIdsAndSelfId($cid) : $cid;
     }
 
     public function fetchCount() {
         $condition = $this->_condition;
         unset($condition['LIMIT']);
-        $count = $this->_model->fetchCountByCondition($condition);
+        $count = $this->_Model->fetchCountByCondition($condition);
         return $count;
     }
 
     public function fetchAll() {
         $condition = $this->_condition;
-        return $rows = $this->_model->fetchRowsByCondition($condition);
+        return $rows = $this->_Model->fetchRowsByCondition($condition);
     }
 
     public function fetchEntities() {
