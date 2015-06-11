@@ -9,7 +9,7 @@ class Controller_Index extends \Core\Controller\Index {
     /**
      * @url http://yourdomain/
      */
-    public function indexAction() {
+    public function IndexAction() {
         $Service = new \Service\Article\QueryList();
         $Service->setCName('house', true);
         $Service->setOrderByVisitor();
